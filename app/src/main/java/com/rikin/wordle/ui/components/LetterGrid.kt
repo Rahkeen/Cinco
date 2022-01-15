@@ -25,23 +25,37 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.rikin.wordle.state.GameAction
+import com.rikin.wordle.state.RowState
+import com.rikin.wordle.state.TileState
+import com.rikin.wordle.state.TileStatus
 import com.rikin.wordle.ui.theme.GreatGreen
 import com.rikin.wordle.ui.theme.RadRed
+import com.rikin.wordle.ui.theme.YikesYellow
 
 
 @Composable
-fun LetterTile(letter: String = "") {
+fun LetterTile(state: TileState) {
+
+    fun tileBackground(state: TileState): Color {
+       return when(state.status) {
+            TileStatus.Unused, TileStatus.Used -> Color.LightGray
+            TileStatus.Correct -> GreatGreen
+            TileStatus.Incorrect -> RadRed
+            TileStatus.Misplaced -> YikesYellow
+        }
+    }
+
     Box(
         modifier = Modifier
             .size(60.dp)
             .background(
-                color = Color.LightGray,
+                color = tileBackground(state),
                 shape = RoundedCornerShape(8.dp)
             ),
         contentAlignment = Alignment.Center
     ) {
         Text(
-            text = letter,
+            text = state.letter,
             style = MaterialTheme.typography.bodyLarge
         )
     }
@@ -49,7 +63,7 @@ fun LetterTile(letter: String = "") {
 
 
 @Composable
-fun WordGrid(grid: List<List<String>>) {
+fun WordGrid(grid: List<RowState>) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -62,8 +76,8 @@ fun WordGrid(grid: List<List<String>>) {
     ) {
         grid.forEach { row ->
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                row.forEach { letter ->
-                    LetterTile(letter)
+                row.tiles.forEach { tile ->
+                    LetterTile(tile)
                 }
             }
         }
@@ -127,17 +141,17 @@ fun GameActionsPreview() {
 @Preview
 @Composable
 fun LetterTilePreview() {
-    LetterTile()
+    LetterTile(TileState())
 }
 
 @Preview
 @Composable
 fun LetterTileRowPreview() {
     Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-        LetterTile("H")
-        LetterTile("E")
-        LetterTile("L")
-        LetterTile("L")
-        LetterTile("O")
+        LetterTile(TileState("H", TileStatus.Used))
+        LetterTile(TileState("E", TileStatus.Used))
+        LetterTile(TileState("L", TileStatus.Used))
+        LetterTile(TileState("L", TileStatus.Used))
+        LetterTile(TileState("O", TileStatus.Used))
     }
 }

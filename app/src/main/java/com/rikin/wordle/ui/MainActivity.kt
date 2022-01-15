@@ -50,7 +50,3 @@ fun GameScreen(state: GameState, actions: (GameAction) -> Unit) {
         Keyboard(actions)
     }
 }
-
-//data class GameState()
-//
-//enum
