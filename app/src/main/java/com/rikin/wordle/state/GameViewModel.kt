@@ -13,6 +13,7 @@ data class GameState(
         RowState(),
         RowState(),
     ),
+    val keyboard: KeyboardState = KeyboardState(),
     val rowPosition: Int = 0,
     val status: GameStatus = GameStatus.Playing
 ) {
@@ -49,16 +50,44 @@ data class RowState(
 
 data class TileState(
     val letter: String = "",
-    val status: TileStatus = TileStatus.Unused
+    val status: LetterStatus = LetterStatus.Unused
 )
 
-enum class TileStatus {
+enum class LetterStatus {
     Unused,
     Used,
     Correct,
     Incorrect,
     Misplaced
 }
+
+data class KeyboardState(
+    val keyRows: List<KeyboardRowState> = listOf(
+        KeyboardRowState(
+            keys = listOf(
+                KeyState(letter = "Q"),
+                KeyState(letter = "W"),
+                KeyState(letter = "E"),
+                KeyState(letter = "R"),
+                KeyState(letter = "T"),
+                KeyState(letter = "Y"),
+                KeyState(letter = "U"),
+                KeyState(letter = "I"),
+                KeyState(letter = "O"),
+                KeyState(letter = "P"),
+            )
+        )
+    )
+)
+
+data class KeyboardRowState(
+    val keys: List<KeyState> = listOf()
+)
+
+data class KeyState(
+    val letter: String = "",
+    val status: LetterStatus = LetterStatus.Unused
+)
 
 sealed class GameAction {
     object Delete : GameAction()
@@ -87,7 +116,7 @@ class GameViewModel : ViewModel() {
                                     index = tilePosition,
                                     state = TileState(
                                         letter = action.letter,
-                                        status = TileStatus.Used
+                                        status = LetterStatus.Used
                                     )
                                 ),
                                 tilePosition = tilePosition + 1
@@ -112,7 +141,7 @@ class GameViewModel : ViewModel() {
                                     index = tilePosition - 1,
                                     state = TileState(
                                         letter = "",
-                                        status = TileStatus.Unused
+                                        status = LetterStatus.Unused
                                     )
                                 ),
                                 tilePosition = tilePosition - 1
@@ -166,14 +195,14 @@ class GameViewModel : ViewModel() {
             ) {
                 val letter = CORRECT_WORD.substring(i, i + 1)
                 if (letter == tile.letter.lowercase()) {
-                    checkedTiles.add(tile.copy(status = TileStatus.Correct))
+                    checkedTiles.add(tile.copy(status = LetterStatus.Correct))
                     correctGuesses++
                 } else {
-                    checkedTiles.add(tile.copy(status = TileStatus.Misplaced))
+                    checkedTiles.add(tile.copy(status = LetterStatus.Misplaced))
                 }
                 lettersLeft.remove(letter)
             } else {
-                checkedTiles.add(tile.copy(status = TileStatus.Incorrect))
+                checkedTiles.add(tile.copy(status = LetterStatus.Incorrect))
             }
         }
         return state.copy(

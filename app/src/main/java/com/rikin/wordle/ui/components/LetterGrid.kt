@@ -27,7 +27,7 @@ import androidx.compose.ui.unit.dp
 import com.rikin.wordle.state.GameAction
 import com.rikin.wordle.state.RowState
 import com.rikin.wordle.state.TileState
-import com.rikin.wordle.state.TileStatus
+import com.rikin.wordle.state.LetterStatus
 import com.rikin.wordle.ui.theme.GreatGreen
 import com.rikin.wordle.ui.theme.RadRed
 import com.rikin.wordle.ui.theme.YikesYellow
@@ -38,16 +38,16 @@ fun LetterTile(state: TileState) {
 
     fun tileBackground(state: TileState): Color {
         return when (state.status) {
-            TileStatus.Unused, TileStatus.Used -> Color.LightGray
-            TileStatus.Correct -> GreatGreen
-            TileStatus.Incorrect -> Color.DarkGray
-            TileStatus.Misplaced -> YikesYellow
+            LetterStatus.Unused, LetterStatus.Used -> Color.LightGray
+            LetterStatus.Correct -> GreatGreen
+            LetterStatus.Incorrect -> Color.DarkGray
+            LetterStatus.Misplaced -> YikesYellow
         }
     }
 
     fun tileTextColor(state: TileState): Color {
         return when (state.status) {
-            TileStatus.Incorrect -> Color.White
+            LetterStatus.Incorrect -> Color.White
             else -> Color.Black
         }
     }
@@ -156,10 +156,10 @@ fun LetterTilePreview() {
 @Composable
 fun LetterTileRowPreview() {
     Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-        LetterTile(TileState("H", TileStatus.Used))
-        LetterTile(TileState("E", TileStatus.Used))
-        LetterTile(TileState("L", TileStatus.Used))
-        LetterTile(TileState("L", TileStatus.Used))
-        LetterTile(TileState("O", TileStatus.Used))
+        LetterTile(TileState("H", LetterStatus.Used))
+        LetterTile(TileState("E", LetterStatus.Used))
+        LetterTile(TileState("L", LetterStatus.Used))
+        LetterTile(TileState("L", LetterStatus.Used))
+        LetterTile(TileState("O", LetterStatus.Used))
     }
 }
