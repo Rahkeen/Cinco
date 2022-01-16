@@ -186,10 +186,12 @@ class GameViewModel : ViewModel() {
                         return
                     }
                     val checkedRow = submitRow(rowToCheck)
+                    val updatedKeyboard = updateKeyboard(checkedRow, state.keyboard)
                     val grid = state.updateRow(rowPosition, checkedRow)
                     val newRowPosition = rowPosition + 1
                     state = state.copy(
                         grid = grid,
+                        keyboard = updatedKeyboard,
                         rowPosition = newRowPosition,
                         status = when {
                             checkedRow.solved -> GameStatus.Win
@@ -232,6 +234,25 @@ class GameViewModel : ViewModel() {
         return state.copy(
             tiles = checkedTiles,
             solved = correctGuesses == CORRECT_WORD.length
+        )
+    }
+
+    private fun updateKeyboard(row: RowState, keyboard: KeyboardState): KeyboardState {
+        val updatedRows = mutableListOf<KeyboardRowState>()
+        keyboard.keyRows.forEach { keyRow ->
+            val updatedKeys = mutableListOf<KeyState>()
+            keyRow.keys.forEach { key ->
+                val tileForKey = row.tiles.find { it.letter == key.letter }
+                if (tileForKey != null) {
+                    updatedKeys.add(key.copy(status = tileForKey.status))
+                } else {
+                    updatedKeys.add(key)
+                }
+            }
+            updatedRows.add(KeyboardRowState(keys = updatedKeys))
+        }
+        return KeyboardState(
+            keyRows = updatedRows
         )
     }
 }

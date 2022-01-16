@@ -21,25 +21,46 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.rikin.wordle.state.GameAction
 import com.rikin.wordle.state.GameAction.KeyPressed
+import com.rikin.wordle.state.KeyState
 import com.rikin.wordle.state.KeyboardState
+import com.rikin.wordle.state.LetterStatus
+import com.rikin.wordle.ui.theme.GreatGreen
+import com.rikin.wordle.ui.theme.YikesYellow
 
 @Composable
-fun Key(letter: String, actions: (KeyPressed) -> Unit) {
+fun Key(state: KeyState, actions: (KeyPressed) -> Unit) {
+
+    fun backgroundColor(status: LetterStatus): Color {
+        return when (status) {
+            LetterStatus.Unused, LetterStatus.Used -> Color.LightGray
+            LetterStatus.Correct -> GreatGreen
+            LetterStatus.Incorrect -> Color.DarkGray
+            LetterStatus.Misplaced -> YikesYellow
+        }
+    }
+
+    fun textColor(status: LetterStatus): Color {
+        return when (status) {
+            LetterStatus.Incorrect -> Color.White
+            else -> Color.Black
+        }
+    }
+
     Box(
         modifier = Modifier
             .width(30.dp)
             .aspectRatio(6.0F / 9)
             .background(
-                color = Color.Gray,
+                color = backgroundColor(state.status),
                 shape = RoundedCornerShape(8.dp)
             )
-            .clickable { actions(KeyPressed(letter)) },
+            .clickable { actions(KeyPressed(state.letter)) },
         contentAlignment = Alignment.Center
     ) {
         Text(
-            text = letter,
+            text = state.letter,
             style = MaterialTheme.typography.bodyMedium,
-            color = Color.White
+            color = textColor(state.status)
         )
     }
 }
@@ -47,7 +68,7 @@ fun Key(letter: String, actions: (KeyPressed) -> Unit) {
 @Preview
 @Composable
 fun KeyPreview() {
-    Key("Q", actions = {})
+    Key(KeyState("Q"), actions = {})
 }
 
 @Composable
@@ -67,7 +88,7 @@ fun Keyboard(state: KeyboardState, actions: (GameAction) -> Unit) {
             ) {
                 keyRow.keys.forEach { key ->
                     Key(
-                        letter = key.letter,
+                        state = key,
                         actions = actions
                     )
                 }
