@@ -123,6 +123,8 @@ class GameViewModel : ViewModel() {
     var state by mutableStateOf(GameState())
         private set
 
+    private var selectedWord = validWords.random()
+
     fun send(action: GameAction) {
         when (action) {
             is GameAction.KeyPressed -> {
@@ -210,16 +212,16 @@ class GameViewModel : ViewModel() {
     }
 
     private fun submitRow(state: RowState): RowState {
-        val lettersLeft = CORRECT_WORD.lowercase().map { "$it" }.toMutableList()
+        val lettersLeft = selectedWord.map { "$it" }.toMutableList()
         val checkedTiles = mutableListOf<TileState>()
         var correctGuesses = 0
         state.tiles.forEachIndexed { i, tile ->
-            if (CORRECT_WORD.contains(
+            if (selectedWord.contains(
                     tile.letter,
                     ignoreCase = true
                 ) && lettersLeft.contains(tile.letter.lowercase())
             ) {
-                val letter = CORRECT_WORD.substring(i, i + 1)
+                val letter = selectedWord.substring(i, i + 1)
                 if (letter == tile.letter.lowercase()) {
                     checkedTiles.add(tile.copy(status = LetterStatus.Correct))
                     correctGuesses++
@@ -233,7 +235,7 @@ class GameViewModel : ViewModel() {
         }
         return state.copy(
             tiles = checkedTiles,
-            solved = correctGuesses == CORRECT_WORD.length
+            solved = correctGuesses == selectedWord.length
         )
     }
 
@@ -263,4 +265,3 @@ fun <T> List<T>.modify(block: MutableList<T>.() -> Unit): List<T> {
 
 const val ROW_SIZE = 5
 const val MAX_ATTEMPTS = 5
-const val CORRECT_WORD = "query"
