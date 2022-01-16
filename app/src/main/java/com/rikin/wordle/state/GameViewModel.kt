@@ -76,7 +76,31 @@ data class KeyboardState(
                 KeyState(letter = "O"),
                 KeyState(letter = "P"),
             )
-        )
+        ),
+        KeyboardRowState(
+            keys = listOf(
+                KeyState(letter = "A"),
+                KeyState(letter = "S"),
+                KeyState(letter = "D"),
+                KeyState(letter = "F"),
+                KeyState(letter = "G"),
+                KeyState(letter = "H"),
+                KeyState(letter = "J"),
+                KeyState(letter = "K"),
+                KeyState(letter = "L"),
+            )
+        ),
+        KeyboardRowState(
+            keys = listOf(
+                KeyState(letter = "Z"),
+                KeyState(letter = "X"),
+                KeyState(letter = "C"),
+                KeyState(letter = "V"),
+                KeyState(letter = "B"),
+                KeyState(letter = "N"),
+                KeyState(letter = "M"),
+            )
+        ),
     )
 )
 

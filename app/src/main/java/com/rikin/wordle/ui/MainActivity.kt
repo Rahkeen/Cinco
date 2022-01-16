@@ -47,6 +47,6 @@ fun GameScreen(state: GameState, actions: (GameAction) -> Unit) {
     ) {
         WordGrid(state.grid)
         GameActions(actions)
-        Keyboard(actions)
+        Keyboard(state.keyboard, actions)
     }
 }

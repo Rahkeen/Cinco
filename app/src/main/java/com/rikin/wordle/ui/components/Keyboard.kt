@@ -21,6 +21,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.rikin.wordle.state.GameAction
 import com.rikin.wordle.state.GameAction.KeyPressed
+import com.rikin.wordle.state.KeyboardState
 
 @Composable
 fun Key(letter: String, actions: (KeyPressed) -> Unit) {
@@ -50,7 +51,7 @@ fun KeyPreview() {
 }
 
 @Composable
-fun Keyboard(actions: (GameAction) -> Unit) {
+fun Keyboard(state: KeyboardState, actions: (GameAction) -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -58,51 +59,19 @@ fun Keyboard(actions: (GameAction) -> Unit) {
         verticalArrangement = Arrangement.spacedBy(8.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(
-                space = 8.dp,
-            )
-        ) {
-            Key("Q", actions)
-            Key("W", actions)
-            Key("E", actions)
-            Key("R", actions)
-            Key("T", actions)
-            Key("Y", actions)
-            Key("U", actions)
-            Key("I", actions)
-            Key("O", actions)
-            Key("P", actions)
-        }
-
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(
-                space = 8.dp,
-            )
-        ) {
-            Key("A", actions)
-            Key("S", actions)
-            Key("D", actions)
-            Key("F", actions)
-            Key("G", actions)
-            Key("H", actions)
-            Key("J", actions)
-            Key("K", actions)
-            Key("L", actions)
-        }
-
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(
-                space = 8.dp,
-            )
-        ) {
-            Key("Z", actions)
-            Key("X", actions)
-            Key("C", actions)
-            Key("V", actions)
-            Key("B", actions)
-            Key("N", actions)
-            Key("M", actions)
+        state.keyRows.forEach { keyRow ->
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(
+                    space = 8.dp,
+                )
+            ) {
+                keyRow.keys.forEach { key ->
+                    Key(
+                        letter = key.letter,
+                        actions = actions
+                    )
+                }
+            }
         }
     }
 }
@@ -110,5 +79,5 @@ fun Keyboard(actions: (GameAction) -> Unit) {
 @Preview
 @Composable
 fun KeyboardPreview() {
-    Keyboard(actions = {})
+    Keyboard(state = KeyboardState(), actions = {})
 }
