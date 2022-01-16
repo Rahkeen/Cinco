@@ -12973,5 +12973,5 @@ zygal
 zygon
 zymes
 zymic
-""".trimIndent()
+""".trimIndent().split("\n")
 

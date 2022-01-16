@@ -128,15 +128,18 @@ class GameViewModel : ViewModel() {
                 val tilePosition = state.grid[rowPosition].tilePosition
 
                 if (tilePosition == ROW_SIZE) {
-                    // check if word is correct
-                    val row = submitRow(state.grid[rowPosition])
-                    val grid = state.updateRow(rowPosition, row)
+                    val rowToCheck = state.grid[rowPosition]
+                    if (!isValidWord(rowToCheck)) {
+                        return
+                    }
+                    val checkedRow = submitRow(rowToCheck)
+                    val grid = state.updateRow(rowPosition, checkedRow)
                     val newRowPosition = rowPosition + 1
                     state = state.copy(
                         grid = grid,
                         rowPosition = newRowPosition,
                         status = when {
-                            row.solved -> GameStatus.Win
+                            checkedRow.solved -> GameStatus.Win
                             newRowPosition < MAX_ATTEMPTS -> GameStatus.Playing
                             else -> GameStatus.Lose
                         }
@@ -144,6 +147,11 @@ class GameViewModel : ViewModel() {
                 }
             }
         }
+    }
+
+    private fun isValidWord(state: RowState): Boolean {
+        val word = state.tiles.map { it.letter.lowercase() }.reduce { acc, s -> acc + s }
+        return validWords.contains(word)
     }
 
     private fun submitRow(state: RowState): RowState {
