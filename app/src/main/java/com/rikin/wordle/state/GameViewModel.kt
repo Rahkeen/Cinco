@@ -226,7 +226,7 @@ class GameViewModel : ViewModel() {
                 } else {
                     checkedTiles.add(tile.copy(status = LetterStatus.Misplaced))
                 }
-                lettersLeft.remove(letter)
+                lettersLeft.remove(tile.letter.lowercase())
             } else {
                 checkedTiles.add(tile.copy(status = LetterStatus.Incorrect))
             }
