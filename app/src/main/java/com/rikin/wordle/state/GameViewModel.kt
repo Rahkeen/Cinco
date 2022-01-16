@@ -37,7 +37,8 @@ data class RowState(
         TileState(),
         TileState(),
     ),
-    val tilePosition: Int = 0
+    val tilePosition: Int = 0,
+    val solved: Boolean = false
 ) {
     fun updateTile(index: Int, state: TileState): List<TileState> {
         return tiles.modify {
@@ -72,10 +73,12 @@ class GameViewModel : ViewModel() {
     fun send(action: GameAction) {
         when (action) {
             is GameAction.KeyPressed -> {
+                if (state.status != GameStatus.Playing) return
+
                 val rowPosition = state.rowPosition
                 val tilePosition = state.grid[rowPosition].tilePosition
 
-                if (state.status == GameStatus.Playing && tilePosition < ROW_SIZE) {
+                if (tilePosition < ROW_SIZE) {
                     state = state.copy(
                         grid = state.updateRow(
                             index = rowPosition,
@@ -95,10 +98,12 @@ class GameViewModel : ViewModel() {
             }
 
             is GameAction.Delete -> {
+                if (state.status != GameStatus.Playing) return
+
                 val rowPosition = state.rowPosition
                 val tilePosition = state.grid[rowPosition].tilePosition
 
-                if (state.status == GameStatus.Playing && tilePosition > 0) {
+                if (tilePosition > 0) {
                     state = state.copy(
                         grid = state.updateRow(
                             index = rowPosition,
@@ -117,18 +122,24 @@ class GameViewModel : ViewModel() {
                 }
             }
             is GameAction.Submit -> {
+                if (state.status != GameStatus.Playing) return
+
                 val rowPosition = state.rowPosition
                 val tilePosition = state.grid[rowPosition].tilePosition
 
-                if (state.status == GameStatus.Playing && tilePosition == ROW_SIZE) {
-                    // check if word
+                if (tilePosition == ROW_SIZE) {
+                    // check if word is correct
                     val row = submitRow(state.grid[rowPosition])
                     val grid = state.updateRow(rowPosition, row)
                     val newRowPosition = rowPosition + 1
                     state = state.copy(
                         grid = grid,
                         rowPosition = newRowPosition,
-                        status = if (newRowPosition < MAX_ATTEMPTS) GameStatus.Playing else GameStatus.Win
+                        status = when {
+                            row.solved -> GameStatus.Win
+                            newRowPosition < MAX_ATTEMPTS -> GameStatus.Playing
+                            else -> GameStatus.Lose
+                        }
                     )
                 }
             }
@@ -136,21 +147,30 @@ class GameViewModel : ViewModel() {
     }
 
     private fun submitRow(state: RowState): RowState {
-        val lettersLeft = CORRECT_WORD.lowercase().toMutableList().map { "$it" }
+        val lettersLeft = CORRECT_WORD.lowercase().map { "$it" }.toMutableList()
         val checkedTiles = mutableListOf<TileState>()
+        var correctGuesses = 0
         state.tiles.forEachIndexed { i, tile ->
-            if (CORRECT_WORD.contains(tile.letter, ignoreCase = true) && lettersLeft.contains(tile.letter.lowercase())) {
-                if (CORRECT_WORD.substring(i, i+1) == tile.letter) {
-                   checkedTiles.add(tile.copy(status = TileStatus.Correct))
+            if (CORRECT_WORD.contains(
+                    tile.letter,
+                    ignoreCase = true
+                ) && lettersLeft.contains(tile.letter.lowercase())
+            ) {
+                val letter = CORRECT_WORD.substring(i, i + 1)
+                if (letter == tile.letter) {
+                    checkedTiles.add(tile.copy(status = TileStatus.Correct))
+                    correctGuesses++
                 } else {
                     checkedTiles.add(tile.copy(status = TileStatus.Misplaced))
                 }
+                lettersLeft.remove(letter)
             } else {
                 checkedTiles.add(tile.copy(status = TileStatus.Incorrect))
             }
         }
-        return RowState(
-            tiles = checkedTiles
+        return state.copy(
+            tiles = checkedTiles,
+            solved = correctGuesses == CORRECT_WORD.length
         )
     }
 }
