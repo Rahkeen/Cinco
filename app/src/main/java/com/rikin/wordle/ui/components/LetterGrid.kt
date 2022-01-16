@@ -40,7 +40,7 @@ fun LetterTile(state: TileState) {
        return when(state.status) {
             TileStatus.Unused, TileStatus.Used -> Color.LightGray
             TileStatus.Correct -> GreatGreen
-            TileStatus.Incorrect -> RadRed
+            TileStatus.Incorrect -> Color.DarkGray
             TileStatus.Misplaced -> YikesYellow
         }
     }

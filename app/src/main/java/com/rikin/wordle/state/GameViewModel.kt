@@ -75,7 +75,7 @@ class GameViewModel : ViewModel() {
                 val rowPosition = state.rowPosition
                 val tilePosition = state.grid[rowPosition].tilePosition
 
-                if (tilePosition < ROW_SIZE) {
+                if (state.status == GameStatus.Playing && tilePosition < ROW_SIZE) {
                     state = state.copy(
                         grid = state.updateRow(
                             index = rowPosition,
@@ -98,7 +98,7 @@ class GameViewModel : ViewModel() {
                 val rowPosition = state.rowPosition
                 val tilePosition = state.grid[rowPosition].tilePosition
 
-                if (tilePosition > 0) {
+                if (state.status == GameStatus.Playing && tilePosition > 0) {
                     state = state.copy(
                         grid = state.updateRow(
                             index = rowPosition,
@@ -116,8 +116,42 @@ class GameViewModel : ViewModel() {
                     )
                 }
             }
-            is GameAction.Submit -> {}
+            is GameAction.Submit -> {
+                val rowPosition = state.rowPosition
+                val tilePosition = state.grid[rowPosition].tilePosition
+
+                if (state.status == GameStatus.Playing && tilePosition == ROW_SIZE) {
+                    // check if word
+                    val row = submitRow(state.grid[rowPosition])
+                    val grid = state.updateRow(rowPosition, row)
+                    val newRowPosition = rowPosition + 1
+                    state = state.copy(
+                        grid = grid,
+                        rowPosition = newRowPosition,
+                        status = if (newRowPosition < MAX_ATTEMPTS) GameStatus.Playing else GameStatus.Win
+                    )
+                }
+            }
         }
+    }
+
+    private fun submitRow(state: RowState): RowState {
+        val lettersLeft = CORRECT_WORD.lowercase().toMutableList().map { "$it" }
+        val checkedTiles = mutableListOf<TileState>()
+        state.tiles.forEachIndexed { i, tile ->
+            if (CORRECT_WORD.contains(tile.letter, ignoreCase = true) && lettersLeft.contains(tile.letter.lowercase())) {
+                if (CORRECT_WORD.substring(i, i+1) == tile.letter) {
+                   checkedTiles.add(tile.copy(status = TileStatus.Correct))
+                } else {
+                    checkedTiles.add(tile.copy(status = TileStatus.Misplaced))
+                }
+            } else {
+                checkedTiles.add(tile.copy(status = TileStatus.Incorrect))
+            }
+        }
+        return RowState(
+            tiles = checkedTiles
+        )
     }
 }
 
@@ -127,3 +161,4 @@ fun <T> List<T>.modify(block: MutableList<T>.() -> Unit): List<T> {
 
 const val ROW_SIZE = 5
 const val MAX_ATTEMPTS = 5
+const val CORRECT_WORD = "HELLO"
