@@ -157,7 +157,7 @@ class GameViewModel : ViewModel() {
                 ) && lettersLeft.contains(tile.letter.lowercase())
             ) {
                 val letter = CORRECT_WORD.substring(i, i + 1)
-                if (letter == tile.letter) {
+                if (letter == tile.letter.lowercase()) {
                     checkedTiles.add(tile.copy(status = TileStatus.Correct))
                     correctGuesses++
                 } else {
@@ -181,4 +181,4 @@ fun <T> List<T>.modify(block: MutableList<T>.() -> Unit): List<T> {
 
 const val ROW_SIZE = 5
 const val MAX_ATTEMPTS = 5
-const val CORRECT_WORD = "HELLO"
+const val CORRECT_WORD = "query"

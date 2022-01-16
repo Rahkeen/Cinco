@@ -37,11 +37,18 @@ import com.rikin.wordle.ui.theme.YikesYellow
 fun LetterTile(state: TileState) {
 
     fun tileBackground(state: TileState): Color {
-       return when(state.status) {
+        return when (state.status) {
             TileStatus.Unused, TileStatus.Used -> Color.LightGray
             TileStatus.Correct -> GreatGreen
             TileStatus.Incorrect -> Color.DarkGray
             TileStatus.Misplaced -> YikesYellow
+        }
+    }
+
+    fun tileTextColor(state: TileState): Color {
+        return when (state.status) {
+            TileStatus.Incorrect -> Color.White
+            else -> Color.Black
         }
     }
 
@@ -56,7 +63,8 @@ fun LetterTile(state: TileState) {
     ) {
         Text(
             text = state.letter,
-            style = MaterialTheme.typography.bodyLarge
+            style = MaterialTheme.typography.bodyLarge,
+            color = tileTextColor(state)
         )
     }
 }
@@ -101,7 +109,7 @@ fun GameActions(actions: (GameAction) -> Unit) {
                 .height(60.dp)
                 .background(color = GreatGreen, shape = RoundedCornerShape(8.dp))
                 .clickable {
-                   actions(GameAction.Submit)
+                    actions(GameAction.Submit)
                 },
             contentAlignment = Alignment.Center
         ) {
@@ -118,7 +126,7 @@ fun GameActions(actions: (GameAction) -> Unit) {
                 .height(60.dp)
                 .background(color = RadRed, shape = RoundedCornerShape(8.dp))
                 .clickable {
-                   actions(GameAction.Delete)
+                    actions(GameAction.Delete)
                 },
             contentAlignment = Alignment.Center
         ) {
