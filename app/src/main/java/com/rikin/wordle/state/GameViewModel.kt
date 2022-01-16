@@ -12,6 +12,7 @@ data class GameState(
         RowState(),
         RowState(),
         RowState(),
+        RowState()
     ),
     val keyboard: KeyboardState = KeyboardState(),
     val rowPosition: Int = 0,
