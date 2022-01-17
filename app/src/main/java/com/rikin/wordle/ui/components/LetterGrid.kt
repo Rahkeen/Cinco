@@ -92,64 +92,11 @@ fun WordGrid(grid: List<RowState>) {
     }
 }
 
-@Composable
-fun GameActions(actions: (GameAction) -> Unit) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .wrapContentHeight(),
-        horizontalArrangement = Arrangement.spacedBy(
-            space = 16.dp,
-            alignment = Alignment.CenterHorizontally
-        )
-    ) {
-        Box(
-            modifier = Modifier
-                .width(80.dp)
-                .height(60.dp)
-                .background(color = GreatGreen, shape = RoundedCornerShape(8.dp))
-                .clickable {
-                    actions(GameAction.Submit)
-                },
-            contentAlignment = Alignment.Center
-        ) {
-            Icon(
-                imageVector = Icons.Filled.Check,
-                contentDescription = "",
-                modifier = Modifier.size(16.dp),
-                tint = Color.White
-            )
-        }
-        Box(
-            modifier = Modifier
-                .width(80.dp)
-                .height(60.dp)
-                .background(color = RadRed, shape = RoundedCornerShape(8.dp))
-                .clickable {
-                    actions(GameAction.Delete)
-                },
-            contentAlignment = Alignment.Center
-        ) {
-            Icon(
-                imageVector = Icons.Filled.ArrowBack,
-                contentDescription = "",
-                modifier = Modifier.size(16.dp),
-                tint = Color.White
-            )
-        }
-    }
-}
-
-@Preview
-@Composable
-fun GameActionsPreview() {
-    GameActions(actions = {})
-}
 
 @Preview
 @Composable
 fun LetterTilePreview() {
-    LetterTile(TileState())
+    LetterTile(TileState(letter = "H", status = LetterStatus.Correct))
 }
 
 @Preview

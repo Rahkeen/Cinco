@@ -6,6 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 
 data class GameState(
+    val selectedWord: String,
     val grid: List<RowState> = listOf(
         RowState(),
         RowState(),
@@ -117,14 +118,14 @@ data class KeyState(
 sealed class GameAction {
     object Delete : GameAction()
     object Submit : GameAction()
+    object Share : GameAction()
+    object Retry : GameAction()
     class KeyPressed(val letter: String) : GameAction()
 }
 
 class GameViewModel : ViewModel() {
-    var state by mutableStateOf(GameState())
+    var state by mutableStateOf(GameState(selectedWord = validWords.random()))
         private set
-
-    private var selectedWord = validWords.random()
 
     fun send(action: GameAction) {
         when (action) {
@@ -188,7 +189,7 @@ class GameViewModel : ViewModel() {
                     if (!isValidWord(rowToCheck)) {
                         return
                     }
-                    val checkedRow = submitRow(rowToCheck)
+                    val checkedRow = submitRow(rowToCheck, state.selectedWord)
                     val updatedKeyboard = updateKeyboard(checkedRow, state.keyboard)
                     val grid = state.updateRow(rowPosition, checkedRow)
                     val newRowPosition = rowPosition + 1
@@ -204,6 +205,12 @@ class GameViewModel : ViewModel() {
                     )
                 }
             }
+            GameAction.Retry -> {
+                state = GameState(selectedWord = validWords.random())
+            }
+            GameAction.Share -> {
+                // TODO
+            }
         }
     }
 
@@ -212,7 +219,7 @@ class GameViewModel : ViewModel() {
         return validWords.contains(word)
     }
 
-    private fun submitRow(state: RowState): RowState {
+    private fun submitRow(state: RowState, selectedWord: String): RowState {
         val lettersLeft = selectedWord.map { "$it" }.toMutableList()
         val checkedTiles = mutableListOf<TileState>()
         var correctGuesses = 0
@@ -265,4 +272,4 @@ fun <T> List<T>.modify(block: MutableList<T>.() -> Unit): List<T> {
 }
 
 const val ROW_SIZE = 5
-const val MAX_ATTEMPTS = 5
+const val MAX_ATTEMPTS = 6
