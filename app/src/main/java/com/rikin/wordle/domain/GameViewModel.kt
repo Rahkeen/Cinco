@@ -149,6 +149,3 @@ class GameViewModel : ViewModel() {
     }
 }
 
-fun <T> List<T>.modify(block: MutableList<T>.() -> Unit): List<T> {
-    return toMutableList().apply(block)
-}

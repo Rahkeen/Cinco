@@ -1,7 +1,6 @@
 package com.rikin.wordle.domain
 
 data class GameState(
-    val selectedWord: String,
     val grid: List<RowState> = listOf(
         RowState(),
         RowState(),
@@ -11,6 +10,7 @@ data class GameState(
         RowState()
     ),
     val keyboard: KeyboardState = KeyboardState(),
+    val selectedWord: String,
     val rowPosition: Int = 0,
     val status: GameStatus = GameStatus.Playing
 ) {
@@ -116,6 +116,10 @@ sealed class GameAction {
     object Share : GameAction()
     object Retry : GameAction()
     class KeyPressed(val letter: String) : GameAction()
+}
+
+fun <T> List<T>.modify(block: MutableList<T>.() -> Unit): List<T> {
+    return toMutableList().apply(block)
 }
 
 const val ROW_SIZE = 5
