@@ -19,13 +19,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.rikin.wordle.state.GameAction
-import com.rikin.wordle.state.GameState
-import com.rikin.wordle.state.GameStatus
+import com.rikin.wordle.domain.GameAction
+import com.rikin.wordle.domain.GameState
+import com.rikin.wordle.domain.GameStatus
 import com.rikin.wordle.ui.components.IconButton
 import com.rikin.wordle.ui.components.IconButtonStyle
 import com.rikin.wordle.ui.theme.BustedBlue
-import com.rikin.wordle.ui.theme.GroovyGray
 import com.rikin.wordle.ui.theme.WordleTheme
 import com.rikin.wordle.ui.theme.YikesYellow
 
@@ -35,8 +34,8 @@ fun ShareScreen(state: GameState, action: (GameAction) -> Unit) {
         modifier = Modifier
             .fillMaxWidth()
             .wrapContentHeight()
-            .padding(8.dp)
-            .background(color = GroovyGray, shape = RoundedCornerShape(16.dp))
+            .padding(16.dp)
+            .background(color = Color.LightGray, shape = RoundedCornerShape(16.dp))
             .padding(vertical = 16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterVertically),
         horizontalAlignment = Alignment.CenterHorizontally

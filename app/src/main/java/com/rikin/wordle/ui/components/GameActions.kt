@@ -27,7 +27,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.rikin.wordle.state.GameAction
+import com.rikin.wordle.domain.GameAction
 import com.rikin.wordle.ui.theme.GreatGreen
 import com.rikin.wordle.ui.theme.RadRed
 import com.rikin.wordle.ui.theme.WordleTheme

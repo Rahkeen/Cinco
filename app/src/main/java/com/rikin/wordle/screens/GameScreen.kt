@@ -1,7 +1,6 @@
 package com.rikin.wordle.ui.screens
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,9 +10,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.rikin.wordle.state.GameAction
-import com.rikin.wordle.state.GameState
-import com.rikin.wordle.state.GameStatus
+import com.rikin.wordle.domain.GameAction
+import com.rikin.wordle.domain.GameState
+import com.rikin.wordle.domain.GameStatus
 import com.rikin.wordle.ui.components.GameActions
 import com.rikin.wordle.ui.components.Keyboard
 import com.rikin.wordle.ui.components.WordGrid

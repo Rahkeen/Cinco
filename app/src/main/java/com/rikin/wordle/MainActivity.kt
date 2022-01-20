@@ -1,10 +1,10 @@
-package com.rikin.wordle.ui
+package com.rikin.wordle
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.rikin.wordle.state.GameViewModel
+import com.rikin.wordle.domain.GameViewModel
 import com.rikin.wordle.ui.screens.GameScreen
 import com.rikin.wordle.ui.theme.WordleTheme
 

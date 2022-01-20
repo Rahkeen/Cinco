@@ -19,11 +19,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.rikin.wordle.state.GameAction
-import com.rikin.wordle.state.GameAction.KeyPressed
-import com.rikin.wordle.state.KeyState
-import com.rikin.wordle.state.KeyboardState
-import com.rikin.wordle.state.LetterStatus
+import com.rikin.wordle.domain.GameAction
+import com.rikin.wordle.domain.GameAction.KeyPressed
+import com.rikin.wordle.domain.KeyState
+import com.rikin.wordle.domain.KeyboardState
+import com.rikin.wordle.domain.LetterStatus
 import com.rikin.wordle.ui.theme.GreatGreen
 import com.rikin.wordle.ui.theme.YikesYellow
 
