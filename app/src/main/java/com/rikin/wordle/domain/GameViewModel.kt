@@ -4,9 +4,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import com.rikin.wordle.data.ClipboardHelper
 
-class GameViewModel : ViewModel() {
-    var state by mutableStateOf(GameState(selectedWord = validWords.random()))
+class GameViewModel(private val clipboardHelper: ClipboardHelper) : ViewModel() {
+    var state by mutableStateOf(GameState(selectedWord = "hello"))
         private set
 
     fun send(action: GameAction) {
@@ -91,9 +93,28 @@ class GameViewModel : ViewModel() {
                 state = GameState(selectedWord = validWords.random())
             }
             GameAction.Share -> {
-                // TODO
+                val title = when(state.status) {
+                    GameStatus.Win -> "Win"
+                    else -> "Lose"
+                }
+                val emojiResult = state.grid
+                    .map(this::convertRowToEmojiString)
+                    .reduce { acc, s -> "$acc\n$s" }
+                clipboardHelper.copy("$title\n\n$emojiResult")
             }
         }
+    }
+
+    private fun convertRowToEmojiString(row: RowState): String {
+        return row.tiles
+            .map { tile ->
+                when (tile.status) {
+                    LetterStatus.Correct -> "\uD83D\uDFE9"
+                    LetterStatus.Misplaced -> "\uD83D\uDFE8"
+                    else -> "⬜"
+                }
+            }
+            .reduce { acc, s -> acc + s }
     }
 
     private fun isValidWord(state: RowState): Boolean {
@@ -149,3 +170,11 @@ class GameViewModel : ViewModel() {
     }
 }
 
+class GameViewModelFactory(
+    private val clipboardHelper: ClipboardHelper
+) : ViewModelProvider.Factory {
+    @Suppress("UNCHECKED_CAST")
+    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+        return GameViewModel(clipboardHelper) as T
+    }
+}

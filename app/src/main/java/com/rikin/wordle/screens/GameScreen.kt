@@ -13,6 +13,7 @@ import androidx.compose.ui.unit.dp
 import com.rikin.wordle.domain.GameAction
 import com.rikin.wordle.domain.GameState
 import com.rikin.wordle.domain.GameStatus
+import com.rikin.wordle.screens.ShareScreen
 import com.rikin.wordle.ui.components.GameActions
 import com.rikin.wordle.ui.components.Keyboard
 import com.rikin.wordle.ui.components.WordGrid

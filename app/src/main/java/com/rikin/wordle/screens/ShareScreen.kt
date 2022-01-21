@@ -1,4 +1,4 @@
-package com.rikin.wordle.ui.screens
+package com.rikin.wordle.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
