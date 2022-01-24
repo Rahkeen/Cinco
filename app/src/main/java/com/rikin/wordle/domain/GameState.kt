@@ -29,11 +29,11 @@ enum class GameStatus {
 
 data class RowState(
     val tiles: List<TileState> = listOf(
-        TileState(),
-        TileState(),
-        TileState(),
-        TileState(),
-        TileState(),
+        TileState(0),
+        TileState(1),
+        TileState(2),
+        TileState(3),
+        TileState(4),
     ),
     val tilePosition: Int = 0,
     val solved: Boolean = false
@@ -46,6 +46,7 @@ data class RowState(
 }
 
 data class TileState(
+    val index: Int = 0,
     val letter: String = "",
     val status: LetterStatus = LetterStatus.Unused
 )

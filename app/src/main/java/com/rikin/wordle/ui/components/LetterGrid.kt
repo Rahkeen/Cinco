@@ -1,5 +1,11 @@
 package com.rikin.wordle.ui.components
 
+import androidx.compose.animation.animateColor
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.snap
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -12,6 +18,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -43,11 +51,25 @@ fun LetterTile(state: TileState) {
         }
     }
 
+    val background by animateColorAsState(
+        targetValue = tileBackground(state),
+        animationSpec = if (state.status == LetterStatus.Unused) {
+            snap()
+        } else {
+            tween(delayMillis = 200 * state.index)
+        }
+    )
+
+    val textColor by animateColorAsState(
+        targetValue = tileTextColor(state),
+        animationSpec = tween(delayMillis = 200 * state.index)
+    )
+
     Box(
         modifier = Modifier
             .size(60.dp)
             .background(
-                color = tileBackground(state),
+                color = background,
                 shape = RoundedCornerShape(8.dp)
             ),
         contentAlignment = Alignment.Center
@@ -55,7 +77,7 @@ fun LetterTile(state: TileState) {
         Text(
             text = state.letter,
             style = MaterialTheme.typography.bodyLarge,
-            color = tileTextColor(state)
+            color = textColor
         )
     }
 }
@@ -94,10 +116,10 @@ fun LetterTilePreview() {
 @Composable
 fun LetterTileRowPreview() {
     Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-        LetterTile(TileState("H", LetterStatus.Used))
-        LetterTile(TileState("E", LetterStatus.Used))
-        LetterTile(TileState("L", LetterStatus.Used))
-        LetterTile(TileState("L", LetterStatus.Used))
-        LetterTile(TileState("O", LetterStatus.Used))
+        LetterTile(TileState(0, "H", LetterStatus.Used))
+        LetterTile(TileState(1, "E", LetterStatus.Used))
+        LetterTile(TileState(2, "L", LetterStatus.Used))
+        LetterTile(TileState(3, "L", LetterStatus.Used))
+        LetterTile(TileState(4, "O", LetterStatus.Used))
     }
 }

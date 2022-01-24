@@ -27,6 +27,7 @@ class GameViewModel(private val clipboardHelper: ClipboardHelper) : ViewModel() 
                                 tiles = state.grid[rowPosition].updateTile(
                                     index = tilePosition,
                                     state = TileState(
+                                        index = tilePosition,
                                         letter = action.letter,
                                         status = LetterStatus.Used
                                     )
@@ -52,6 +53,7 @@ class GameViewModel(private val clipboardHelper: ClipboardHelper) : ViewModel() 
                                 tiles = state.grid[rowPosition].updateTile(
                                     index = tilePosition - 1,
                                     state = TileState(
+                                        index = tilePosition - 1,
                                         letter = "",
                                         status = LetterStatus.Unused
                                     )
