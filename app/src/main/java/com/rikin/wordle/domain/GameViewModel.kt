@@ -94,14 +94,15 @@ class GameViewModel(private val clipboardHelper: ClipboardHelper) : ViewModel() 
             }
             GameAction.Share -> {
                 val title = when (state.status) {
-                    GameStatus.Win -> "Win"
+                    GameStatus.Win -> "Win: ${state.rowPosition}/${state.grid.size}"
                     else -> "Lose"
                 }
-                val emojiResult = state.grid
-                    .filter { it.tiles[0].status != LetterStatus.Unused }
+                val emojiGrid = state.grid
+                    .filter { row -> row.tiles[0].status != LetterStatus.Unused }
                     .map(this::convertRowToEmojiString)
-                    .reduce { acc, s -> "$acc\n$s" }
-                clipboardHelper.copy("$title\n\n$emojiResult")
+                    .reduce { grid, row -> "$grid\n$row" }
+
+                clipboardHelper.copy("$title\n\n$emojiGrid")
             }
         }
     }
