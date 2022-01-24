@@ -8,7 +8,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.rikin.wordle.data.ClipboardHelper
 
 class GameViewModel(private val clipboardHelper: ClipboardHelper) : ViewModel() {
-    var state by mutableStateOf(GameState(selectedWord = "hello"))
+    var state by mutableStateOf(GameState(selectedWord = commonWords.random()))
         private set
 
     fun send(action: GameAction) {
@@ -90,7 +90,7 @@ class GameViewModel(private val clipboardHelper: ClipboardHelper) : ViewModel() 
                 }
             }
             GameAction.Retry -> {
-                state = GameState(selectedWord = validWords.random())
+                state = GameState(selectedWord = commonWords.random() )
             }
             GameAction.Share -> {
                 val title = when (state.status) {
@@ -121,7 +121,7 @@ class GameViewModel(private val clipboardHelper: ClipboardHelper) : ViewModel() 
 
     private fun isValidWord(state: RowState): Boolean {
         val word = state.tiles.map { it.letter.lowercase() }.reduce { acc, s -> acc + s }
-        return validWords.contains(word)
+        return allWords.contains(word)
     }
 
     private fun submitRow(state: RowState, selectedWord: String): RowState {

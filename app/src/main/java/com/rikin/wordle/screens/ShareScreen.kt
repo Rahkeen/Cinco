@@ -36,9 +36,10 @@ import com.rikin.wordle.ui.theme.YikesYellow
 fun ShareScreen(state: GameState, action: (GameAction) -> Unit) {
     Column(
         modifier = Modifier
-            .wrapContentWidth()
+            .fillMaxWidth()
             .wrapContentHeight()
-            .background(color = Color.DarkGray)
+            .padding(horizontal = 16.dp)
+            .background(color = Color.DarkGray, shape = RoundedCornerShape(16.dp ))
             .padding(vertical = 16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterVertically),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -46,9 +47,18 @@ fun ShareScreen(state: GameState, action: (GameAction) -> Unit) {
         fun gameText(status: GameStatus): String {
             return when (status) {
                 GameStatus.Win -> "✅"
-                else -> "⛔️"
+                GameStatus.Lose -> "⛔️"
+                else -> ""
             }
         }
+
+        fun wordText(state: GameState): String {
+            return when (state.status) {
+                GameStatus.Win, GameStatus.Lose -> state.selectedWord.capitalize(Locale.current)
+                else -> ""
+            }
+        }
+
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -65,7 +75,7 @@ fun ShareScreen(state: GameState, action: (GameAction) -> Unit) {
             )
 
             Text(
-                text = state.selectedWord.capitalize(locale = Locale.current),
+                text = wordText(state),
                 style = MaterialTheme.typography.headlineSmall,
                 color = Color.White
             )
