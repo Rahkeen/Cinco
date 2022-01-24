@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Refresh
@@ -17,6 +18,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.capitalize
+import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.rikin.wordle.domain.GameAction
@@ -25,6 +28,7 @@ import com.rikin.wordle.domain.GameStatus
 import com.rikin.wordle.ui.components.IconButton
 import com.rikin.wordle.ui.components.IconButtonStyle
 import com.rikin.wordle.ui.theme.BustedBlue
+import com.rikin.wordle.ui.theme.GroovyGray
 import com.rikin.wordle.ui.theme.WordleTheme
 import com.rikin.wordle.ui.theme.YikesYellow
 
@@ -32,30 +36,40 @@ import com.rikin.wordle.ui.theme.YikesYellow
 fun ShareScreen(state: GameState, action: (GameAction) -> Unit) {
     Column(
         modifier = Modifier
-            .fillMaxWidth()
+            .wrapContentWidth()
             .wrapContentHeight()
-            .padding(16.dp)
-            .background(color = Color.LightGray, shape = RoundedCornerShape(16.dp))
+            .background(color = Color.DarkGray)
             .padding(vertical = 16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterVertically),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         fun gameText(status: GameStatus): String {
             return when (status) {
-                GameStatus.Win -> "Winner!"
-                GameStatus.Lose -> "Dang it!"
-                GameStatus.Playing -> "Huh?"
+                GameStatus.Win -> "✅"
+                else -> "⛔️"
             }
         }
-        Text(
-            text = gameText(state.status),
-            style = MaterialTheme.typography.headlineLarge
-        )
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .wrapContentHeight(),
+            horizontalArrangement = Arrangement.spacedBy(
+                space = 16.dp,
+                alignment = Alignment.CenterHorizontally
+            )
+        ) {
+            Text(
+                text = gameText(state.status),
+                style = MaterialTheme.typography.headlineSmall,
+                color = Color.White
+            )
 
-        Text(
-            text = "Word: ${state.selectedWord}",
-            style = MaterialTheme.typography.headlineSmall
-        )
+            Text(
+                text = state.selectedWord.capitalize(locale = Locale.current),
+                style = MaterialTheme.typography.headlineSmall,
+                color = Color.White
+            )
+        }
 
         Row(
             modifier = Modifier
@@ -72,7 +86,7 @@ fun ShareScreen(state: GameState, action: (GameAction) -> Unit) {
                     icon = Icons.Filled.Share,
                     iconTint = Color.White,
                     backgroundColor = BustedBlue,
-                    textColor = Color.Black
+                    textColor = Color.White
                 )
             ) {
                 action(GameAction.Share)
@@ -84,7 +98,7 @@ fun ShareScreen(state: GameState, action: (GameAction) -> Unit) {
                     icon = Icons.Filled.Refresh,
                     iconTint = Color.Black,
                     backgroundColor = YikesYellow,
-                    textColor = Color.Black
+                    textColor = Color.White
                 )
             ) {
                 action(GameAction.Retry)
@@ -99,7 +113,7 @@ fun ShareScreenPreview() {
     WordleTheme {
         ShareScreen(
             state = GameState(
-                selectedWord = "Hello",
+                selectedWord = "hello",
                 status = GameStatus.Win
             ),
             action = {}
