@@ -2,6 +2,10 @@ package com.rikin.wordle.ui.components
 
 import androidx.compose.animation.animateColor
 import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.keyframes
 import androidx.compose.animation.core.snap
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
@@ -18,13 +22,17 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.rikin.wordle.domain.GameState
 import com.rikin.wordle.domain.RowState
 import com.rikin.wordle.domain.TileState
 import com.rikin.wordle.domain.LetterStatus
@@ -84,7 +92,7 @@ fun LetterTile(state: TileState) {
 
 
 @Composable
-fun WordGrid(grid: List<RowState>) {
+fun WordGrid(state: GameState) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -95,8 +103,30 @@ fun WordGrid(grid: List<RowState>) {
         ),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        grid.forEach { row ->
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+        state.grid.forEach { row ->
+            val translation = remember { Animatable(0F) }
+            if (state.animateInvalidWord) {
+                LaunchedEffect(key1 = state.animateInvalidWord) {
+                    translation.animateTo(
+                        targetValue = 0F,
+                        animationSpec = keyframes {
+                            durationMillis = 400
+                            0F at 0
+                            -50F at 50
+                            0F at 100
+                            50F at 150
+                            0F at 200
+                            -50F at 250
+                            0F at 300
+                            50F at 350
+                        }
+                    )
+                }
+            }
+            Row(
+                modifier = Modifier.graphicsLayer(translationX = translation.value),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
                 row.tiles.forEach { tile ->
                     LetterTile(tile)
                 }
@@ -115,7 +145,29 @@ fun LetterTilePreview() {
 @Preview
 @Composable
 fun LetterTileRowPreview() {
-    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+    val translation = remember { Animatable(0F) }
+    LaunchedEffect(key1 = true) {
+        translation.animateTo(
+            targetValue = 0F,
+            animationSpec = keyframes {
+                durationMillis = 400
+                0F at 0
+                -50F at 50
+                0F at 100
+                50F at 150
+                0F at 200
+                -50F at 250
+                0F at 300
+                50F at 350
+            }
+        )
+    }
+    Row(
+        modifier = Modifier.graphicsLayer(
+            translationX = translation.value
+        ),
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
         LetterTile(TileState(0, "H", LetterStatus.Used))
         LetterTile(TileState(1, "E", LetterStatus.Used))
         LetterTile(TileState(2, "L", LetterStatus.Used))

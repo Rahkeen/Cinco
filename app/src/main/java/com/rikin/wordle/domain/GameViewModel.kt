@@ -34,7 +34,8 @@ class GameViewModel(private val clipboardHelper: ClipboardHelper) : ViewModel() 
                                 ),
                                 tilePosition = tilePosition + 1
                             )
-                        )
+                        ),
+                        animateInvalidWord = false
                     )
                 }
             }
@@ -60,7 +61,8 @@ class GameViewModel(private val clipboardHelper: ClipboardHelper) : ViewModel() 
                                 ),
                                 tilePosition = tilePosition - 1
                             )
-                        )
+                        ),
+                        animateInvalidWord = false
                     )
                 }
             }
@@ -73,6 +75,7 @@ class GameViewModel(private val clipboardHelper: ClipboardHelper) : ViewModel() 
                 if (tilePosition == ROW_SIZE) {
                     val rowToCheck = state.grid[rowPosition]
                     if (!isValidWord(rowToCheck)) {
+                        state = state.copy(animateInvalidWord = true)
                         return
                     }
                     val checkedRow = submitRow(rowToCheck, state.selectedWord)
@@ -83,6 +86,7 @@ class GameViewModel(private val clipboardHelper: ClipboardHelper) : ViewModel() 
                         grid = grid,
                         keyboard = updatedKeyboard,
                         rowPosition = newRowPosition,
+                        animateInvalidWord = false,
                         status = when {
                             checkedRow.solved -> GameStatus.Win
                             newRowPosition < MAX_ATTEMPTS -> GameStatus.Playing

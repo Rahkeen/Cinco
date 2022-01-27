@@ -8,7 +8,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.rikin.wordle.data.ClipboardHelper
 import com.rikin.wordle.domain.GameViewModel
 import com.rikin.wordle.domain.GameViewModelFactory
-import com.rikin.wordle.ui.screens.GameScreen
+import com.rikin.wordle.screens.GameScreen
 import com.rikin.wordle.ui.theme.WordleTheme
 
 class MainActivity : ComponentActivity() {

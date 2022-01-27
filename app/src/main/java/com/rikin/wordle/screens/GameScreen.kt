@@ -1,4 +1,4 @@
-package com.rikin.wordle.ui.screens
+package com.rikin.wordle.screens
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
@@ -31,7 +31,6 @@ import com.rikin.wordle.ui.components.GameActions
 import com.rikin.wordle.ui.components.Keyboard
 import com.rikin.wordle.ui.components.WordGrid
 
-@ExperimentalAnimationApi
 @Composable
 fun GameScreen(state: GameState, actions: (GameAction) -> Unit) {
     val scrollState = rememberScrollState()
@@ -63,7 +62,7 @@ fun GameScreen(state: GameState, actions: (GameAction) -> Unit) {
         ) {
             ShareScreen(state = state, action = actions)
         }
-        WordGrid(state.grid)
+        WordGrid(state)
         GameActions(actions)
         Keyboard(state.keyboard, actions)
     }
