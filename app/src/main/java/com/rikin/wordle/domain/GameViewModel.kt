@@ -96,7 +96,7 @@ class GameViewModel(private val clipboardHelper: ClipboardHelper) : ViewModel() 
                 }
             }
             GameAction.Retry -> {
-                state = GameState(selectedWord = commonWords.random() )
+                state = GameState(selectedWord = commonWords.random())
             }
             GameAction.Share -> {
                 val title = when (state.status) {
@@ -132,26 +132,39 @@ class GameViewModel(private val clipboardHelper: ClipboardHelper) : ViewModel() 
 
     private fun submitRow(state: RowState, selectedWord: String): RowState {
         val lettersLeft = selectedWord.map { "$it" }.toMutableList()
-        val checkedTiles = mutableListOf<TileState>()
+        val checkedTiles = mutableListOf(
+            TileState(),
+            TileState(),
+            TileState(),
+            TileState(),
+            TileState()
+        )
+        val checkedIndices = BooleanArray(5)
         var correctGuesses = 0
+        // first pass for correct letters
         state.tiles.forEachIndexed { i, tile ->
-            if (selectedWord.contains(
-                    tile.letter,
-                    ignoreCase = true
-                ) && lettersLeft.contains(tile.letter.lowercase())
-            ) {
-                val letter = selectedWord.substring(i, i + 1)
-                if (letter == tile.letter.lowercase()) {
-                    checkedTiles.add(tile.copy(status = LetterStatus.Correct))
-                    correctGuesses++
-                } else {
-                    checkedTiles.add(tile.copy(status = LetterStatus.Misplaced))
-                }
-                lettersLeft.remove(tile.letter.lowercase())
-            } else {
-                checkedTiles.add(tile.copy(status = LetterStatus.Incorrect))
+            val letter = tile.letter.lowercase()
+            if (selectedWord.substring(i, i + 1) == letter) {
+                checkedTiles[i] = tile.copy(status = LetterStatus.Correct)
+                checkedIndices[i] = true
+                lettersLeft.remove(letter)
             }
         }
+
+        // second pass for other letters, i know it's gross for now don't @ me
+        state.tiles.forEachIndexed { i, tile ->
+            if (!checkedIndices[i]) {
+                if (selectedWord.contains(tile.letter, true) &&
+                    lettersLeft.contains(tile.letter.lowercase())
+                ) {
+                    checkedTiles[i] = tile.copy(status = LetterStatus.Misplaced)
+                    lettersLeft.remove(tile.letter.lowercase())
+                } else {
+                    checkedTiles[i] = tile.copy(status = LetterStatus.Incorrect)
+                }
+            }
+        }
+
         return state.copy(
             tiles = checkedTiles,
             solved = correctGuesses == selectedWord.length
