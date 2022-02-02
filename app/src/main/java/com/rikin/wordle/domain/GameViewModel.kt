@@ -148,6 +148,7 @@ class GameViewModel(private val clipboardHelper: ClipboardHelper) : ViewModel() 
                 checkedTiles[i] = tile.copy(status = LetterStatus.Correct)
                 checkedIndices[i] = true
                 lettersLeft.remove(letter)
+                correctGuesses++
             }
         }
 
