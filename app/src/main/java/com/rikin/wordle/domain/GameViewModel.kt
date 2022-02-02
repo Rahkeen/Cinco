@@ -5,7 +5,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import com.rikin.wordle.data.ClipboardHelper
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class GameViewModel(private val clipboardHelper: ClipboardHelper) : ViewModel() {
     var state by mutableStateOf(GameState(selectedWord = commonWords.random()))
@@ -109,6 +112,12 @@ class GameViewModel(private val clipboardHelper: ClipboardHelper) : ViewModel() 
                     .reduce { grid, row -> "$grid\n$row" }
 
                 clipboardHelper.copy("$title\n\n$emojiGrid")
+
+                viewModelScope.launch {
+                    state = state.copy(copiedWord = true)
+                    delay(3000L)
+                    state = state.copy(copiedWord = false)
+                }
             }
         }
     }
@@ -117,9 +126,9 @@ class GameViewModel(private val clipboardHelper: ClipboardHelper) : ViewModel() 
         return row.tiles
             .map { tile ->
                 when (tile.status) {
-                    LetterStatus.Correct -> "\uD83D\uDFE9"
-                    LetterStatus.Misplaced -> "\uD83D\uDFE8"
-                    else -> "⬜"
+                    LetterStatus.Correct -> "\uD83D\uDFE7"
+                    LetterStatus.Misplaced -> "🟦"
+                    else -> "⬛️"
                 }
             }
             .reduce { acc, s -> acc + s }

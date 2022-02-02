@@ -13,6 +13,7 @@ data class GameState(
     val selectedWord: String,
     val rowPosition: Int = 0,
     val animateInvalidWord: Boolean = false,
+    val copiedWord: Boolean = false,
     val status: GameStatus = GameStatus.Playing
 ) {
     fun updateRow(index: Int, state: RowState): List<RowState> {
