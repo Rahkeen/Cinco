@@ -28,8 +28,9 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.rikin.wordle.domain.GameAction
-import com.rikin.wordle.ui.theme.GreatGreen
-import com.rikin.wordle.ui.theme.RadRed
+import com.rikin.wordle.ui.theme.Correct
+import com.rikin.wordle.ui.theme.PrimaryAction
+import com.rikin.wordle.ui.theme.Unused
 import com.rikin.wordle.ui.theme.WordleTheme
 
 @Composable
@@ -47,7 +48,7 @@ fun GameActions(actions: (GameAction) -> Unit) {
             modifier = Modifier
                 .width(80.dp)
                 .height(60.dp)
-                .background(color = GreatGreen, shape = RoundedCornerShape(8.dp))
+                .background(color = PrimaryAction, shape = RoundedCornerShape(8.dp))
                 .clickable {
                     actions(GameAction.Submit)
                 },
@@ -64,7 +65,7 @@ fun GameActions(actions: (GameAction) -> Unit) {
             modifier = Modifier
                 .width(80.dp)
                 .height(60.dp)
-                .background(color = RadRed, shape = RoundedCornerShape(8.dp))
+                .background(color = Unused, shape = RoundedCornerShape(8.dp))
                 .clickable {
                     actions(GameAction.Delete)
                 },
@@ -137,7 +138,7 @@ fun IconButtonPreview() {
             style = IconButtonStyle(
                 icon = Icons.Filled.Share,
                 iconTint = Color.White,
-                backgroundColor = GreatGreen,
+                backgroundColor = Correct,
                 textColor = Color.Black
             ),
             action = {}

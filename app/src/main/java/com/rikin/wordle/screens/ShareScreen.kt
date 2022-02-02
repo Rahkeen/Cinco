@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Refresh
@@ -27,10 +26,10 @@ import com.rikin.wordle.domain.GameState
 import com.rikin.wordle.domain.GameStatus
 import com.rikin.wordle.ui.components.IconButton
 import com.rikin.wordle.ui.components.IconButtonStyle
-import com.rikin.wordle.ui.theme.BustedBlue
-import com.rikin.wordle.ui.theme.GroovyGray
+import com.rikin.wordle.ui.theme.Incorrect
+import com.rikin.wordle.ui.theme.SecondaryAction
+import com.rikin.wordle.ui.theme.Unused
 import com.rikin.wordle.ui.theme.WordleTheme
-import com.rikin.wordle.ui.theme.YikesYellow
 
 @Composable
 fun ShareScreen(state: GameState, action: (GameAction) -> Unit) {
@@ -39,7 +38,7 @@ fun ShareScreen(state: GameState, action: (GameAction) -> Unit) {
             .fillMaxWidth()
             .wrapContentHeight()
             .padding(horizontal = 16.dp)
-            .background(color = Color.DarkGray, shape = RoundedCornerShape(16.dp ))
+            .background(color = Incorrect, shape = RoundedCornerShape(16.dp ))
             .padding(vertical = 16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterVertically),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -95,7 +94,7 @@ fun ShareScreen(state: GameState, action: (GameAction) -> Unit) {
                 style = IconButtonStyle(
                     icon = Icons.Filled.Share,
                     iconTint = Color.White,
-                    backgroundColor = BustedBlue,
+                    backgroundColor = SecondaryAction,
                     textColor = Color.White
                 )
             ) {
@@ -106,8 +105,8 @@ fun ShareScreen(state: GameState, action: (GameAction) -> Unit) {
                 text = "Retry",
                 style = IconButtonStyle(
                     icon = Icons.Filled.Refresh,
-                    iconTint = Color.Black,
-                    backgroundColor = YikesYellow,
+                    iconTint = Color.White,
+                    backgroundColor = SecondaryAction,
                     textColor = Color.White
                 )
             ) {

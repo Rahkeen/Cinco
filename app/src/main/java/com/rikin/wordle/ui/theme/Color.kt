@@ -10,8 +10,12 @@ val Purple40 = Color(0xFF6650a4)
 val PurpleGrey40 = Color(0xFF625b71)
 val Pink40 = Color(0xFF7D5260)
 
-val GreatGreen = Color(0xFF4caf50)
-val RadRed = Color(0xFFf44336)
-val YikesYellow = Color(0xFFffc107)
-val BustedBlue = Color(0xFF42a5f5)
-val GroovyGray = Color(0xFFeceff1)
+val Correct = Color(0xFFff8f00)
+val Misplaced = Color(0xFF1E88E5)
+val Unused = Color(0xFF424242)
+val Incorrect = Color(0xFF1b1b1b)
+
+val PrimaryAction = Correct
+val SecondaryAction = Unused
+
+val BackgroundBlack = Color(0xFF040404)

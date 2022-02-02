@@ -12,6 +12,7 @@ import androidx.compose.animation.scaleOut
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -30,6 +31,7 @@ import com.rikin.wordle.screens.ShareScreen
 import com.rikin.wordle.ui.components.GameActions
 import com.rikin.wordle.ui.components.Keyboard
 import com.rikin.wordle.ui.components.WordGrid
+import com.rikin.wordle.ui.theme.BackgroundBlack
 
 @Composable
 fun GameScreen(state: GameState, actions: (GameAction) -> Unit) {
@@ -37,6 +39,7 @@ fun GameScreen(state: GameState, actions: (GameAction) -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .background(color = BackgroundBlack)
             .padding(vertical = 16.dp)
             .verticalScroll(scrollState),
         verticalArrangement = Arrangement.spacedBy(

@@ -24,26 +24,25 @@ import com.rikin.wordle.domain.GameAction.KeyPressed
 import com.rikin.wordle.domain.KeyState
 import com.rikin.wordle.domain.KeyboardState
 import com.rikin.wordle.domain.LetterStatus
-import com.rikin.wordle.ui.theme.GreatGreen
-import com.rikin.wordle.ui.theme.YikesYellow
+import com.rikin.wordle.ui.theme.Correct
+import com.rikin.wordle.ui.theme.Incorrect
+import com.rikin.wordle.ui.theme.Misplaced
+import com.rikin.wordle.ui.theme.Unused
 
 @Composable
 fun Key(state: KeyState, actions: (KeyPressed) -> Unit) {
 
     fun backgroundColor(status: LetterStatus): Color {
         return when (status) {
-            LetterStatus.Unused, LetterStatus.Used -> Color.LightGray
-            LetterStatus.Correct -> GreatGreen
-            LetterStatus.Incorrect -> Color.DarkGray
-            LetterStatus.Misplaced -> YikesYellow
+            LetterStatus.Unused, LetterStatus.Used -> Unused
+            LetterStatus.Correct -> Correct
+            LetterStatus.Incorrect -> Incorrect
+            LetterStatus.Misplaced -> Misplaced
         }
     }
 
     fun textColor(status: LetterStatus): Color {
-        return when (status) {
-            LetterStatus.Incorrect -> Color.White
-            else -> Color.Black
-        }
+        return Color.White
     }
 
     Box(

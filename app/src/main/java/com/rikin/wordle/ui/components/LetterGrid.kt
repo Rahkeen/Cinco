@@ -29,26 +29,25 @@ import androidx.compose.ui.unit.dp
 import com.rikin.wordle.domain.GameState
 import com.rikin.wordle.domain.LetterStatus
 import com.rikin.wordle.domain.TileState
-import com.rikin.wordle.ui.theme.GreatGreen
-import com.rikin.wordle.ui.theme.YikesYellow
+import com.rikin.wordle.ui.theme.Correct
+import com.rikin.wordle.ui.theme.Incorrect
+import com.rikin.wordle.ui.theme.Misplaced
+import com.rikin.wordle.ui.theme.Unused
 
 @Composable
 fun LetterTile(state: TileState) {
 
     fun tileBackground(state: TileState): Color {
         return when (state.status) {
-            LetterStatus.Unused, LetterStatus.Used -> Color.LightGray
-            LetterStatus.Correct -> GreatGreen
-            LetterStatus.Incorrect -> Color.DarkGray
-            LetterStatus.Misplaced -> YikesYellow
+            LetterStatus.Unused, LetterStatus.Used -> Unused
+            LetterStatus.Correct -> Correct
+            LetterStatus.Incorrect -> Incorrect
+            LetterStatus.Misplaced -> Misplaced
         }
     }
 
     fun tileTextColor(state: TileState): Color {
-        return when (state.status) {
-            LetterStatus.Incorrect -> Color.White
-            else -> Color.Black
-        }
+        return Color.White
     }
 
     val background by animateColorAsState(
