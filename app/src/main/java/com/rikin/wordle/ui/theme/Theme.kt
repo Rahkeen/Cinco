@@ -15,6 +15,7 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.ViewCompat
+import com.google.accompanist.insets.ProvideWindowInsets
 
 private val DarkColorScheme = darkColorScheme(
     primary = Purple80,
@@ -64,6 +65,9 @@ fun WordleTheme(
     MaterialTheme(
         colorScheme = colorScheme,
         typography = Typography,
-        content = content
-    )
+    ) {
+        ProvideWindowInsets {
+            content()
+        }
+    }
 }

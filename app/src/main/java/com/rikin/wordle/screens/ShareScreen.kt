@@ -21,6 +21,7 @@ import androidx.compose.ui.text.capitalize
 import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.google.accompanist.insets.statusBarsPadding
 import com.rikin.wordle.domain.GameAction
 import com.rikin.wordle.domain.GameState
 import com.rikin.wordle.domain.GameStatus
@@ -28,7 +29,6 @@ import com.rikin.wordle.ui.components.IconButton
 import com.rikin.wordle.ui.components.IconButtonStyle
 import com.rikin.wordle.ui.theme.Incorrect
 import com.rikin.wordle.ui.theme.SecondaryAction
-import com.rikin.wordle.ui.theme.Unused
 import com.rikin.wordle.ui.theme.WordleTheme
 
 @Composable
@@ -37,8 +37,9 @@ fun ShareScreen(state: GameState, action: (GameAction) -> Unit) {
         modifier = Modifier
             .fillMaxWidth()
             .wrapContentHeight()
+            .statusBarsPadding()
             .padding(horizontal = 16.dp)
-            .background(color = Incorrect, shape = RoundedCornerShape(16.dp ))
+            .background(color = Incorrect, shape = RoundedCornerShape(16.dp))
             .padding(vertical = 16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterVertically),
         horizontalAlignment = Alignment.CenterHorizontally
