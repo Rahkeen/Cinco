@@ -1,4 +1,4 @@
-package com.rikin.wordle.ui.components
+package com.rikin.cinco.ui.components
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.Animatable
@@ -26,13 +26,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.rikin.wordle.domain.GameState
-import com.rikin.wordle.domain.LetterStatus
-import com.rikin.wordle.domain.TileState
-import com.rikin.wordle.ui.theme.Correct
-import com.rikin.wordle.ui.theme.Incorrect
-import com.rikin.wordle.ui.theme.Misplaced
-import com.rikin.wordle.ui.theme.Unused
+import com.rikin.cinco.domain.GameState
+import com.rikin.cinco.domain.LetterStatus
+import com.rikin.cinco.domain.TileState
+import com.rikin.cinco.ui.theme.Correct
+import com.rikin.cinco.ui.theme.Incorrect
+import com.rikin.cinco.ui.theme.Misplaced
+import com.rikin.cinco.ui.theme.Unused
 
 @Composable
 fun LetterTile(state: TileState) {

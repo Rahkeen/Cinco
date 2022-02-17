@@ -1,4 +1,4 @@
-package com.rikin.wordle.ui.components
+package com.rikin.cinco.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -19,15 +19,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.rikin.wordle.domain.GameAction
-import com.rikin.wordle.domain.GameAction.KeyPressed
-import com.rikin.wordle.domain.KeyState
-import com.rikin.wordle.domain.KeyboardState
-import com.rikin.wordle.domain.LetterStatus
-import com.rikin.wordle.ui.theme.Correct
-import com.rikin.wordle.ui.theme.Incorrect
-import com.rikin.wordle.ui.theme.Misplaced
-import com.rikin.wordle.ui.theme.Unused
+import com.rikin.cinco.domain.GameAction
+import com.rikin.cinco.domain.GameAction.KeyPressed
+import com.rikin.cinco.domain.KeyState
+import com.rikin.cinco.domain.KeyboardState
+import com.rikin.cinco.domain.LetterStatus
+import com.rikin.cinco.ui.theme.Correct
+import com.rikin.cinco.ui.theme.Incorrect
+import com.rikin.cinco.ui.theme.Misplaced
+import com.rikin.cinco.ui.theme.Unused
 
 @Composable
 fun Key(state: KeyState, actions: (KeyPressed) -> Unit) {

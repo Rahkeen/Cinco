@@ -1,4 +1,4 @@
-package com.rikin.wordle.ui.theme
+package com.rikin.cinco.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

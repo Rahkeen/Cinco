@@ -1,4 +1,4 @@
-package com.rikin.wordle.domain
+package com.rikin.cinco.domain
 
 val validWords = """
 aahed

@@ -1,4 +1,4 @@
-package com.rikin.wordle.data
+package com.rikin.cinco.data
 
 import androidx.compose.ui.platform.ClipboardManager
 import androidx.compose.ui.text.AnnotatedString

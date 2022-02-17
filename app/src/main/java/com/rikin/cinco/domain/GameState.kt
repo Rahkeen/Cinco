@@ -1,4 +1,4 @@
-package com.rikin.wordle.domain
+package com.rikin.cinco.domain
 
 data class GameState(
     val grid: List<RowState> = listOf(

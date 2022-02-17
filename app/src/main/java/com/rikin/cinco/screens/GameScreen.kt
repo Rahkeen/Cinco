@@ -1,17 +1,12 @@
-package com.rikin.wordle.screens
+package com.rikin.cinco.screens
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.animation.scaleIn
-import androidx.compose.animation.scaleOut
 import androidx.compose.animation.shrinkVertically
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -22,16 +17,14 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.unit.dp
-import com.rikin.wordle.domain.GameAction
-import com.rikin.wordle.domain.GameState
-import com.rikin.wordle.domain.GameStatus
-import com.rikin.wordle.screens.ShareScreen
-import com.rikin.wordle.ui.components.GameActions
-import com.rikin.wordle.ui.components.Keyboard
-import com.rikin.wordle.ui.components.WordGrid
-import com.rikin.wordle.ui.theme.BackgroundBlack
+import com.rikin.cinco.domain.GameAction
+import com.rikin.cinco.domain.GameState
+import com.rikin.cinco.domain.GameStatus
+import com.rikin.cinco.ui.components.GameActions
+import com.rikin.cinco.ui.components.Keyboard
+import com.rikin.cinco.ui.components.WordGrid
+import com.rikin.cinco.ui.theme.BackgroundBlack
 
 @Composable
 fun GameScreen(state: GameState, actions: (GameAction) -> Unit) {

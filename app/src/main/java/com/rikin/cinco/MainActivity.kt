@@ -1,4 +1,4 @@
-package com.rikin.wordle
+package com.rikin.cinco
 
 import android.os.Bundle
 import android.util.Log
@@ -17,12 +17,12 @@ import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.rikin.wordle.data.ClipboardHelper
-import com.rikin.wordle.domain.GameViewModel
-import com.rikin.wordle.domain.GameViewModelFactory
-import com.rikin.wordle.screens.GameScreen
-import com.rikin.wordle.ui.theme.Incorrect
-import com.rikin.wordle.ui.theme.WordleTheme
+import com.rikin.cinco.data.ClipboardHelper
+import com.rikin.cinco.domain.GameViewModel
+import com.rikin.cinco.domain.GameViewModelFactory
+import com.rikin.cinco.screens.GameScreen
+import com.rikin.cinco.ui.theme.Incorrect
+import com.rikin.cinco.ui.theme.WordleTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -1,4 +1,4 @@
-package com.rikin.wordle.domain
+package com.rikin.cinco.domain
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -6,7 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.rikin.wordle.data.ClipboardHelper
+import com.rikin.cinco.data.ClipboardHelper
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 

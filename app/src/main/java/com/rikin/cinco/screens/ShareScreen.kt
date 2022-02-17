@@ -1,4 +1,4 @@
-package com.rikin.wordle.screens
+package com.rikin.cinco.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -22,14 +22,14 @@ import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.insets.statusBarsPadding
-import com.rikin.wordle.domain.GameAction
-import com.rikin.wordle.domain.GameState
-import com.rikin.wordle.domain.GameStatus
-import com.rikin.wordle.ui.components.IconButton
-import com.rikin.wordle.ui.components.IconButtonStyle
-import com.rikin.wordle.ui.theme.Incorrect
-import com.rikin.wordle.ui.theme.SecondaryAction
-import com.rikin.wordle.ui.theme.WordleTheme
+import com.rikin.cinco.domain.GameAction
+import com.rikin.cinco.domain.GameState
+import com.rikin.cinco.domain.GameStatus
+import com.rikin.cinco.ui.components.IconButton
+import com.rikin.cinco.ui.components.IconButtonStyle
+import com.rikin.cinco.ui.theme.Incorrect
+import com.rikin.cinco.ui.theme.SecondaryAction
+import com.rikin.cinco.ui.theme.WordleTheme
 
 @Composable
 fun ShareScreen(state: GameState, action: (GameAction) -> Unit) {

@@ -1,4 +1,4 @@
-package com.rikin.wordle.ui.theme
+package com.rikin.cinco.ui.theme
 
 import android.app.Activity
 import android.os.Build
