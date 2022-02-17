@@ -29,7 +29,7 @@ import com.rikin.cinco.ui.components.IconButton
 import com.rikin.cinco.ui.components.IconButtonStyle
 import com.rikin.cinco.ui.theme.Incorrect
 import com.rikin.cinco.ui.theme.SecondaryAction
-import com.rikin.cinco.ui.theme.WordleTheme
+import com.rikin.cinco.ui.theme.CincoTheme
 
 @Composable
 fun ShareScreen(state: GameState, action: (GameAction) -> Unit) {
@@ -120,7 +120,7 @@ fun ShareScreen(state: GameState, action: (GameAction) -> Unit) {
 @Preview
 @Composable
 fun ShareScreenPreview() {
-    WordleTheme {
+    CincoTheme {
         ShareScreen(
             state = GameState(
                 selectedWord = "hello",

@@ -22,7 +22,7 @@ import com.rikin.cinco.domain.GameViewModel
 import com.rikin.cinco.domain.GameViewModelFactory
 import com.rikin.cinco.screens.GameScreen
 import com.rikin.cinco.ui.theme.Incorrect
-import com.rikin.cinco.ui.theme.WordleTheme
+import com.rikin.cinco.ui.theme.CincoTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,7 +41,7 @@ class MainActivity : ComponentActivity() {
 
             Log.d("GameState", "GameState: $gameState")
 
-            WordleTheme {
+            CincoTheme {
                 Scaffold(
                     scaffoldState = scaffoldState,
                     snackbarHost = { state ->

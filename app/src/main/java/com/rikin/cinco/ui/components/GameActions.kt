@@ -31,7 +31,7 @@ import com.rikin.cinco.domain.GameAction
 import com.rikin.cinco.ui.theme.Correct
 import com.rikin.cinco.ui.theme.PrimaryAction
 import com.rikin.cinco.ui.theme.Unused
-import com.rikin.cinco.ui.theme.WordleTheme
+import com.rikin.cinco.ui.theme.CincoTheme
 
 @Composable
 fun GameActions(actions: (GameAction) -> Unit) {
@@ -132,7 +132,7 @@ fun IconButton(
 @Preview
 @Composable
 fun IconButtonPreview() {
-    WordleTheme {
+    CincoTheme {
         IconButton(
             text = "Share",
             style = IconButtonStyle(
