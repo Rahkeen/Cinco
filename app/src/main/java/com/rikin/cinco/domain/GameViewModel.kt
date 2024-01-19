@@ -69,6 +69,7 @@ class GameViewModel(private val clipboardHelper: ClipboardHelper) : ViewModel() 
                     )
                 }
             }
+
             is GameAction.Submit -> {
                 if (state.status != GameStatus.Playing) return
 
@@ -98,9 +99,11 @@ class GameViewModel(private val clipboardHelper: ClipboardHelper) : ViewModel() 
                     )
                 }
             }
+
             GameAction.Retry -> {
                 state = GameState(selectedWord = commonWords.random())
             }
+
             GameAction.Share -> {
                 val title = when (state.status) {
                     GameStatus.Win -> "Win: ${state.rowPosition}/${state.grid.size}"
@@ -188,7 +191,39 @@ class GameViewModel(private val clipboardHelper: ClipboardHelper) : ViewModel() 
             keyRow.keys.forEach { key ->
                 val tileForKey = row.tiles.find { it.letter == key.letter }
                 if (tileForKey != null) {
-                    updatedKeys.add(key.copy(status = tileForKey.status))
+                    val currentKeyStatus = key.status
+                    val currentTileStatus = tileForKey.status
+
+                    when {
+                        // Condition for when the current letter in the row is in the correct
+                        // position. Keyboard letter should be updated to correct hinted colour.
+                        currentTileStatus == LetterStatus.Correct -> {
+                            updatedKeys.add(key.copy(status = tileForKey.status))
+                        }
+
+                        // Condition for when the current letter in the row is in the word but
+                        // not in the correct position. Keyboard letter should be updated to
+                        // misplaced hinted colour if and only if it is not already marked as
+                        // correct.
+                        currentTileStatus == LetterStatus.Misplaced &&
+                                currentKeyStatus != LetterStatus.Correct -> {
+                            updatedKeys.add(key.copy(status = tileForKey.status))
+                        }
+
+                        // Condition for when the current letter guessed is incorrect. The keyboard
+                        // letter should be updated to the incorrect state from the unused one.
+                        currentTileStatus == LetterStatus.Incorrect &&
+                                (currentKeyStatus == LetterStatus.Incorrect ||
+                                        currentKeyStatus == LetterStatus.Unused) -> {
+                            updatedKeys.add(key.copy(status = tileForKey.status))
+                        }
+
+                        // Condition for when none of the above conditions are met. The keys still
+                        // needs to be added, lest the key be removed from the screen entirely.
+                        else -> {
+                            updatedKeys.add(key)
+                        }
+                    }
                 } else {
                     updatedKeys.add(key)
                 }
