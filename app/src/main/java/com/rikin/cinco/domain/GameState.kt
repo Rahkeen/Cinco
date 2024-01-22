@@ -53,12 +53,17 @@ data class TileState(
     val status: LetterStatus = LetterStatus.Unused
 )
 
-enum class LetterStatus {
-    Unused,
-    Used,
-    Correct,
-    Incorrect,
-    Misplaced
+/**
+ * Adding a [priority] property to this enum, where a lower value denotes a higher priority.
+ * The main purpose of this property is to ensure that a hinted tile isn't unintentionally
+ * overturned on a future incorrect use of a letter.
+ */
+enum class LetterStatus(val priority: Int = 2) {
+    Unused(priority = 2),
+    Used(priority = 2),
+    Correct(priority = 0),
+    Incorrect(priority = 2),
+    Misplaced(priority = 1)
 }
 
 data class KeyboardState(
