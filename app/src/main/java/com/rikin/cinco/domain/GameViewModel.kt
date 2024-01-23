@@ -13,7 +13,6 @@ import kotlinx.coroutines.launch
 class GameViewModel(private val clipboardHelper: ClipboardHelper) : ViewModel() {
     var state by mutableStateOf(GameState(selectedWord = commonWords.random()))
         private set
-
     fun send(action: GameAction) {
         when (action) {
             is GameAction.KeyPressed -> {
@@ -69,6 +68,7 @@ class GameViewModel(private val clipboardHelper: ClipboardHelper) : ViewModel() 
                     )
                 }
             }
+
             is GameAction.Submit -> {
                 if (state.status != GameStatus.Playing) return
 
@@ -98,9 +98,11 @@ class GameViewModel(private val clipboardHelper: ClipboardHelper) : ViewModel() 
                     )
                 }
             }
+
             GameAction.Retry -> {
                 state = GameState(selectedWord = commonWords.random())
             }
+
             GameAction.Share -> {
                 val title = when (state.status) {
                     GameStatus.Win -> "Win: ${state.rowPosition}/${state.grid.size}"
@@ -186,8 +188,12 @@ class GameViewModel(private val clipboardHelper: ClipboardHelper) : ViewModel() 
         keyboard.keyRows.forEach { keyRow ->
             val updatedKeys = mutableListOf<KeyState>()
             keyRow.keys.forEach { key ->
+                // There is an issue here where a guess with a repeating letter in which the position
+                // of the first is incorrect, but the position of the second isn't can appear as
+                // incorrect. This is because we only look for the first letter in the row instead of
+                // all instances of a letter.
                 val tileForKey = row.tiles.find { it.letter == key.letter }
-                if (tileForKey != null) {
+                if (tileForKey != null && key.status.priority >= tileForKey.status.priority) {
                     updatedKeys.add(key.copy(status = tileForKey.status))
                 } else {
                     updatedKeys.add(key)
