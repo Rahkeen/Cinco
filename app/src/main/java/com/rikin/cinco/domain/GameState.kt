@@ -106,7 +106,11 @@ data class KeyboardState(
                 KeyState(letter = "M"),
             )
         ),
-    )
+    ),
+    val keyMappings: MutableMap<String, KeyState> = keyRows.map { it.keys }
+        .flatten()
+        .associateBy { it.letter }
+        .toMutableMap(),
 )
 
 data class KeyboardRowState(

@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.rikin.cinco.data.ClipboardHelper
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.lang.IllegalArgumentException
 
 class GameViewModel(private val clipboardHelper: ClipboardHelper) : ViewModel() {
     var state by mutableStateOf(GameState(selectedWord = commonWords.random()))
@@ -184,17 +185,34 @@ class GameViewModel(private val clipboardHelper: ClipboardHelper) : ViewModel() 
     }
 
     private fun updateKeyboard(row: RowState, keyboard: KeyboardState): KeyboardState {
+
+        fun updateKeyMappings(): KeyboardState {
+            row.tiles.forEach { tile: TileState ->
+                val letter = tile.letter
+                val currentKey = keyboard.keyMappings[letter]
+                    ?: throw IllegalArgumentException("Could not find the letter $letter in key mappings.")
+                val tilePriority = tile.status.priority
+
+                if (tilePriority <= currentKey.status.priority) {
+                    keyboard.keyMappings[letter] = currentKey.copy(status = tile.status)
+                }
+            }
+
+            return keyboard
+        }
+
+        val updatedKeyboardState = updateKeyMappings()
         val updatedRows = mutableListOf<KeyboardRowState>()
         keyboard.keyRows.forEach { keyRow ->
             val updatedKeys = mutableListOf<KeyState>()
             keyRow.keys.forEach { key ->
-                // There is an issue here where a guess with a repeating letter in which the position
-                // of the first is incorrect, but the position of the second isn't can appear as
-                // incorrect. This is because we only look for the first letter in the row instead of
-                // all instances of a letter.
                 val tileForKey = row.tiles.find { it.letter == key.letter }
+
                 if (tileForKey != null && key.status.priority >= tileForKey.status.priority) {
-                    updatedKeys.add(key.copy(status = tileForKey.status))
+                    val tileLetter = updatedKeyboardState.keyMappings[tileForKey.letter]
+                        ?: throw IllegalArgumentException("Could not find the letter ${tileForKey.letter} in key mappings.")
+
+                    updatedKeys.add(tileLetter)
                 } else {
                     updatedKeys.add(key)
                 }
