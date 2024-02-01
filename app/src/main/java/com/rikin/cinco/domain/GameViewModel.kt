@@ -201,27 +201,31 @@ class GameViewModel(private val clipboardHelper: ClipboardHelper) : ViewModel() 
             return keyboard
         }
 
-        val updatedKeyboardState = updateKeyMappings()
-        val updatedRows = mutableListOf<KeyboardRowState>()
-        keyboard.keyRows.forEach { keyRow ->
-            val updatedKeys = mutableListOf<KeyState>()
-            keyRow.keys.forEach { key ->
-                val tileForKey = row.tiles.find { it.letter == key.letter }
+        fun updateKeyboardRows(updatedState: KeyboardState): MutableList<KeyboardRowState> {
+            val updatedRows = mutableListOf<KeyboardRowState>()
+            keyboard.keyRows.forEach { keyRow ->
+                val updatedKeys = mutableListOf<KeyState>()
+                keyRow.keys.forEach { key ->
+                    val tileForKey = row.tiles.find { it.letter == key.letter }
 
-                if (tileForKey != null && key.status.priority >= tileForKey.status.priority) {
-                    val tileLetter = updatedKeyboardState.keyMappings[tileForKey.letter]
-                        ?: throw IllegalArgumentException("Could not find the letter ${tileForKey.letter} in key mappings.")
+                    if (tileForKey != null && key.status.priority >= tileForKey.status.priority) {
+                        val tileLetter = updatedState.keyMappings[tileForKey.letter]
+                            ?: throw IllegalArgumentException("Could not find the letter ${tileForKey.letter} in key mappings.")
 
-                    updatedKeys.add(tileLetter)
-                } else {
-                    updatedKeys.add(key)
+                        updatedKeys.add(tileLetter)
+                    } else {
+                        updatedKeys.add(key)
+                    }
                 }
+                updatedRows.add(KeyboardRowState(keys = updatedKeys))
             }
-            updatedRows.add(KeyboardRowState(keys = updatedKeys))
+
+            return updatedRows
         }
-        return KeyboardState(
-            keyRows = updatedRows
-        )
+
+        val updatedKeyboardState = updateKeyMappings()
+        val updatedRows = updateKeyboardRows(updatedState = updatedKeyboardState)
+        return KeyboardState(keyRows = updatedRows)
     }
 }
 
