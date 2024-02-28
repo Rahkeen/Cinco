@@ -14,6 +14,7 @@ import java.lang.IllegalArgumentException
 class GameViewModel(private val clipboardHelper: ClipboardHelper) : ViewModel() {
     var state by mutableStateOf(GameState(selectedWord = commonWords.random()))
         private set
+
     fun send(action: GameAction) {
         when (action) {
             is GameAction.KeyPressed -> {
@@ -83,7 +84,9 @@ class GameViewModel(private val clipboardHelper: ClipboardHelper) : ViewModel() 
                         return
                     }
                     val checkedRow = submitRow(rowToCheck, state.selectedWord)
-                    val updatedKeyboard = updateKeyboard(checkedRow, state.keyboard)
+                    val tilePriorityMap = checkedRow.tiles.toPriorityMap()
+                    val updatedKeyboard =
+                        updateKeyboard(checkedRow, tilePriorityMap, state.keyboard)
                     val grid = state.updateRow(rowPosition, checkedRow)
                     val newRowPosition = rowPosition + 1
                     state = state.copy(
@@ -184,47 +187,30 @@ class GameViewModel(private val clipboardHelper: ClipboardHelper) : ViewModel() 
         )
     }
 
-    private fun updateKeyboard(row: RowState, keyboard: KeyboardState): KeyboardState {
+    private fun updateKeyboard(
+        row: RowState,
+        letterMap: Map<String, LetterStatus>,
+        keyboard: KeyboardState
+    ): KeyboardState {
 
-        fun updateKeyMappings(): KeyboardState {
-            row.tiles.forEach { tile: TileState ->
-                val letter = tile.letter
-                val currentKey = keyboard.keyMappings[letter]
-                    ?: throw IllegalArgumentException("Could not find the letter $letter in key mappings.")
-                val tilePriority = tile.status.priority
+        val updatedRows = mutableListOf<KeyboardRowState>()
+        keyboard.keyRows.forEach { keyRow ->
+            val updatedKeys = keyRow.keys.map { key ->
+                val tileForKey = row.tiles.find { it.letter == key.letter }
+                val tilePriority = tileForKey?.status?.priority ?: 2
+                val keyPriority = key.status.priority
 
-                if (tilePriority <= currentKey.status.priority) {
-                    keyboard.keyMappings[letter] = currentKey.copy(status = tile.status)
+                if (tileForKey != null && tilePriority <= keyPriority) {
+                    val updatedLetterStatus = letterMap[tileForKey.letter]
+                        ?: throw IllegalArgumentException("Could not find the letter ${tileForKey.letter} in key mappings.")
+
+                    key.copy(status = updatedLetterStatus)
+                } else {
+                    key
                 }
             }
-
-            return keyboard
+            updatedRows.add(KeyboardRowState(keys = updatedKeys))
         }
-
-        fun updateKeyboardRows(updatedState: KeyboardState): MutableList<KeyboardRowState> {
-            val updatedRows = mutableListOf<KeyboardRowState>()
-            keyboard.keyRows.forEach { keyRow ->
-                val updatedKeys = mutableListOf<KeyState>()
-                keyRow.keys.forEach { key ->
-                    val tileForKey = row.tiles.find { it.letter == key.letter }
-
-                    if (tileForKey != null && key.status.priority >= tileForKey.status.priority) {
-                        val tileLetter = updatedState.keyMappings[tileForKey.letter]
-                            ?: throw IllegalArgumentException("Could not find the letter ${tileForKey.letter} in key mappings.")
-
-                        updatedKeys.add(tileLetter)
-                    } else {
-                        updatedKeys.add(key)
-                    }
-                }
-                updatedRows.add(KeyboardRowState(keys = updatedKeys))
-            }
-
-            return updatedRows
-        }
-
-        val updatedKeyboardState = updateKeyMappings()
-        val updatedRows = updateKeyboardRows(updatedState = updatedKeyboardState)
         return KeyboardState(keyRows = updatedRows)
     }
 }
