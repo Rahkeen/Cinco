@@ -9,10 +9,12 @@ import androidx.lifecycle.viewModelScope
 import com.rikin.cinco.data.ClipboardHelper
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.lang.IllegalArgumentException
 
 class GameViewModel(private val clipboardHelper: ClipboardHelper) : ViewModel() {
     var state by mutableStateOf(GameState(selectedWord = commonWords.random()))
         private set
+
     fun send(action: GameAction) {
         when (action) {
             is GameAction.KeyPressed -> {
@@ -82,7 +84,9 @@ class GameViewModel(private val clipboardHelper: ClipboardHelper) : ViewModel() 
                         return
                     }
                     val checkedRow = submitRow(rowToCheck, state.selectedWord)
-                    val updatedKeyboard = updateKeyboard(checkedRow, state.keyboard)
+                    val tilePriorityMap = checkedRow.tiles.toPriorityMap()
+                    val updatedKeyboard =
+                        updateKeyboard(checkedRow, tilePriorityMap, state.keyboard)
                     val grid = state.updateRow(rowPosition, checkedRow)
                     val newRowPosition = rowPosition + 1
                     state = state.copy(
@@ -183,27 +187,31 @@ class GameViewModel(private val clipboardHelper: ClipboardHelper) : ViewModel() 
         )
     }
 
-    private fun updateKeyboard(row: RowState, keyboard: KeyboardState): KeyboardState {
+    private fun updateKeyboard(
+        row: RowState,
+        letterMap: Map<String, LetterStatus>,
+        keyboard: KeyboardState
+    ): KeyboardState {
+
         val updatedRows = mutableListOf<KeyboardRowState>()
         keyboard.keyRows.forEach { keyRow ->
-            val updatedKeys = mutableListOf<KeyState>()
-            keyRow.keys.forEach { key ->
-                // There is an issue here where a guess with a repeating letter in which the position
-                // of the first is incorrect, but the position of the second isn't can appear as
-                // incorrect. This is because we only look for the first letter in the row instead of
-                // all instances of a letter.
+            val updatedKeys = keyRow.keys.map { key ->
                 val tileForKey = row.tiles.find { it.letter == key.letter }
-                if (tileForKey != null && key.status.priority >= tileForKey.status.priority) {
-                    updatedKeys.add(key.copy(status = tileForKey.status))
+                val tilePriority = tileForKey?.status?.priority ?: 2
+                val keyPriority = key.status.priority
+
+                if (tileForKey != null && tilePriority <= keyPriority) {
+                    val updatedLetterStatus = letterMap[tileForKey.letter]
+                        ?: throw IllegalArgumentException("Could not find the letter ${tileForKey.letter} in key mappings.")
+
+                    key.copy(status = updatedLetterStatus)
                 } else {
-                    updatedKeys.add(key)
+                    key
                 }
             }
             updatedRows.add(KeyboardRowState(keys = updatedKeys))
         }
-        return KeyboardState(
-            keyRows = updatedRows
-        )
+        return KeyboardState(keyRows = updatedRows)
     }
 }
 

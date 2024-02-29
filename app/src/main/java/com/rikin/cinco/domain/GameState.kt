@@ -106,7 +106,7 @@ data class KeyboardState(
                 KeyState(letter = "M"),
             )
         ),
-    )
+    ),
 )
 
 data class KeyboardRowState(
@@ -128,6 +128,21 @@ sealed class GameAction {
 
 fun <T> List<T>.modify(block: MutableList<T>.() -> Unit): List<T> {
     return toMutableList().apply(block)
+}
+
+fun List<TileState>.toPriorityMap(): Map<String, LetterStatus> {
+    val statusMap = mutableMapOf<String, LetterStatus>()
+
+    this.forEach { tile: TileState ->
+        val tileLetterPriority = tile.status.priority
+        val mapLetterPriority = statusMap[tile.letter]?.priority ?: 2
+
+        if (tileLetterPriority <= mapLetterPriority) {
+            statusMap[tile.letter] = tile.status
+        }
+    }
+
+    return statusMap
 }
 
 const val ROW_SIZE = 5
